@@ -2,7 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
+from authapp.models import Contact,Membershipplan,Trainer,Enrollment
 # Create your views here.
+
 def home(request):
     return render(request,"index.html")
 
@@ -68,3 +70,42 @@ def handleLogout(request):
     return redirect('/login')
 
 
+def Contact(request):
+    if request.method=="POST":
+        name=request.POST.get('fullname')
+        email=request.POST.get('email')
+        number=request.POST.get('num')
+        desc=request.POST.get('desc')
+        myquery=Contact(name=name,email=email,phonenumber=number,description=desc)
+        myquery.save()       
+        messages.info(request,"Thanks for Contacting us we will get back you soon")
+        return redirect('/Contact')
+        
+    return render(request,"Contact.html")
+
+def enroll(request):
+    if not request.user.is_authenticated:
+        messages.warning(request,"Please Login and Try Again")
+        return redirect('/login')
+
+    Membership=Membershipplan.objects.all()
+    SelectTrainer=Trainer.objects.all()
+    context={"Membership":Membership,"SelectTrainer":SelectTrainer}
+    if request.method=="POST":
+        FullName=request.POST.get('FullName')
+        email=request.POST.get('email')
+        gender=request.POST.get('gender')
+        PhoneNumber=request.POST.get('PhoneNumber')
+        DOB=request.POST.get('DOB')
+        member=request.POST.get('member')
+        trainer=request.POST.get('trainer')
+        reference=request.POST.get('reference')
+        address=request.POST.get('address')
+        query=Enrollment(FullName=FullName,Email=email,Gender=gender,PhoneNumber=PhoneNumber,DOB=DOB,SelectMembershipplan=member,SelectTrainer=trainer,Reference=reference,Address=address)
+        query.save()
+        messages.success(request,"Thanks For Enrollment")
+        return redirect('/join')
+
+
+
+    return render(request,"enroll.html",context)
