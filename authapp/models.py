@@ -32,15 +32,34 @@ class Trainer(models.Model):
     name=models.CharField(max_length=25)
     gender=models.CharField(max_length=25)
     phone=models.CharField(max_length=12)
-    salary=models.IntegerField(max_length=25)
+    salary=models.IntegerField()
     timestamp=models.DateTimeField(auto_now_add=True,blank=True)
     def __str__(self):
         return self.name
 
 class Membershipplan(models.Model):
     plan=models.CharField(max_length=25)
-    price=models.IntegerField(max_length=25)
+    price=models.IntegerField()
 
     def __str__(self):
+        return self.id
+
+
+class Gallery(models.Model):
+    title=models.CharField(max_length=100)
+    img=models.ImageField(upload_to='gallery')
+    timeStamp=models.DateTimeField(auto_now_add=True,blank=True)
+    def __int__(self):
+        return self.id
+
+
+class Attendance(models.Model):
+    Selectdate=models.DateTimeField(auto_now_add=True)
+    phonenumber=models.CharField(max_length=15)
+    Login=models.CharField(max_length=200)
+    Logout=models.CharField(max_length=200)
+    SelectWorkout=models.CharField(max_length=200)
+    TrainedBy=models.CharField(max_length=200)
+    def __int__(self):
         return self.id
 
